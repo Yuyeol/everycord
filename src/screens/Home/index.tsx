@@ -1,3 +1,4 @@
+import Calendar from '@/screens/Home/components/calendar';
 import Memo from '@/screens/Home/components/memo';
 import Title from '@/screens/Home/components/title';
 import React from 'react';
@@ -12,6 +13,7 @@ function Home() {
       <Title title="루틴" />
       <Title title="메모" />
       <Memo />
+      <Calendar />
     </SafeAreaView>
   );
 }

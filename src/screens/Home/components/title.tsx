@@ -7,8 +7,6 @@ interface IProps {
 }
 
 function Title({title}: IProps) {
-  // 예시 메모 데이터
-
   return (
     <View style={styles.titleContainer}>
       <Text style={styles.titleText}>{title}</Text>
@@ -19,7 +17,6 @@ function Title({title}: IProps) {
   );
 }
 
-// 스타일 정의
 const styles = StyleSheet.create({
   titleContainer: {
     paddingHorizontal: 20,
