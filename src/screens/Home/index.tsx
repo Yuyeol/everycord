@@ -1,19 +1,22 @@
-import Calendar from '@/screens/Home/components/calendar';
+// import Calendar from '@/screens/Home/components/calendar';
 import Memo from '@/screens/Home/components/memo';
 import Title from '@/screens/Home/components/title';
+import {ParamListBase} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-
-function Home() {
-  // 예시 메모 데이터
-
+type HomeScreenProps = NativeStackScreenProps<ParamListBase, 'Home'>;
+export default function Home({navigation}: HomeScreenProps) {
+  const goMemoForm = () => {
+    navigation.navigate('MemoForm');
+  };
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Title title="일정" />
-      <Title title="루틴" />
-      <Title title="메모" />
+      {/* <Title title="일정" />
+      <Title title="루틴" /> */}
+      <Title title="메모" goScreen={goMemoForm} />
       <Memo />
-      <Calendar />
+      {/* <Calendar /> */}
     </SafeAreaView>
   );
 }
@@ -32,5 +35,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default Home;

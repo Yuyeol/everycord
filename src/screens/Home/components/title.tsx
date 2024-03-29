@@ -1,18 +1,19 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 interface IProps {
   title: string;
+  goScreen: () => void;
 }
 
-function Title({title}: IProps) {
+function Title({title, goScreen}: IProps) {
   return (
     <View style={styles.titleContainer}>
       <Text style={styles.titleText}>{title}</Text>
-      <View>
+      <TouchableOpacity onPress={goScreen}>
         <Icon name="form" size={16} color="black" />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
