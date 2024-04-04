@@ -1,23 +1,15 @@
+import {useGetMemos} from '@/hooks/useGetMemos';
 import Item from '@/screens/Home/components/memo/item';
+import {IMemo} from '@/type';
 import React from 'react';
 import {FlatList, View, StyleSheet, Text, Pressable} from 'react-native';
 
-export interface IMemo {
-  id: string;
-  title: string;
-  content: string;
-}
 interface IRenderItem {
   item: IMemo;
 }
 
-const memos: IMemo[] = [
-  {id: '1', title: '타이틀 1', content: '메모 1'},
-  {id: '2', title: '타이틀 2', content: '메모 2'},
-  {id: '3', title: '타이틀 3', content: '메모 3'},
-  {id: '4', title: '타이틀 4', content: '메모 4'},
-];
 function Memo() {
+  const {memos} = useGetMemos();
   const renderItem = ({item}: IRenderItem) => <Item item={item} />;
   return (
     <View style={styles.container}>
@@ -42,6 +34,7 @@ const styles = StyleSheet.create({
   },
   container: {padding: 10},
   flatList: {},
+
   moreButton: {
     paddingVertical: 5,
     paddingHorizontal: 10,
