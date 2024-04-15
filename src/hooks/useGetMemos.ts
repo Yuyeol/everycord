@@ -1,31 +1,19 @@
-import {useState, useEffect} from 'react';
+import {useQuery} from 'react-query';
 import {supabase} from '@/lib/server/supabase';
 import {IMemo} from '@/type';
 
+const fetchMemos = async () => {
+  const response = await supabase.from('memo').select('*');
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+  return response.data;
+};
+
 export function useGetMemos() {
-  const [memos, setMemos] = useState<IMemo[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    async function fetchMemos() {
-      try {
-        setLoading(true);
-        const response = await supabase.from('memo').select('*');
-
-        if (response.error) {
-          throw response.error;
-        }
-
-        setMemos(response.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchMemos();
-  }, []);
-
-  return {memos, loading};
+  const {data, error, isLoading} = useQuery<IMemo[], Error>(
+    'memos',
+    fetchMemos,
+  );
+  return {data, error, isLoading};
 }

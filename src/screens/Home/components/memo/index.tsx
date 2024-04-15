@@ -9,7 +9,7 @@ interface IRenderItem {
 }
 
 function Memo() {
-  const {memos} = useGetMemos();
+  const {data: memos} = useGetMemos();
   const renderItem = ({item}: IRenderItem) => <Item item={item} />;
   return (
     <View style={styles.container}>
