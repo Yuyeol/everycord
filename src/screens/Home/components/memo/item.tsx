@@ -1,24 +1,32 @@
-import {IMemo} from '@/screens/Home/components/memo';
+import {IMemo} from '@/type';
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 
-const Item = ({item}: {item: IMemo}) => (
-  <View style={styles.memoItem}>
-    <View style={styles.titleContainer}>
-      <Text>{item.title}</Text>
-    </View>
-    <View style={styles.contentContainer}>
-      <Text>{item.content}</Text>
+interface IProps {
+  item: IMemo;
+}
+
+const Item = ({item}: IProps) => (
+  <View style={styles.container}>
+    <View style={styles.memoContainer}>
+      <View style={styles.titleContainer}>
+        <Text>{item.title}</Text>
+      </View>
+      <View style={styles.contentContainer}>
+        <Text>{item.content}</Text>
+      </View>
     </View>
   </View>
 );
 
 // 스타일 정의
 const styles = StyleSheet.create({
-  memoItem: {
-    flex: 1,
+  container: {
+    width: '50%',
+    padding: 10,
+  },
+  memoContainer: {
     backgroundColor: 'white',
-    margin: 10,
     height: 150,
     borderRadius: 10,
     overflow: 'hidden',
