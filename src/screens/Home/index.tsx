@@ -7,14 +7,14 @@ import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 type HomeScreenProps = NativeStackScreenProps<ParamListBase, 'Home'>;
 export default function Home({navigation}: HomeScreenProps) {
-  const goMemoForm = () => {
-    navigation.navigate('MemoForm');
+  const goBookmarkForm = () => {
+    navigation.navigate('BookmarkForm');
   };
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* <Title title="일정" />
       <Title title="루틴" /> */}
-      <Title title="메모" goScreen={goMemoForm} />
+      <Title title="북마크" goScreen={goBookmarkForm} />
       <Memo />
       {/* <Calendar /> */}
     </SafeAreaView>

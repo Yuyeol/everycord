@@ -12,15 +12,18 @@ import {
   View,
 } from 'react-native';
 
-interface IMemoForm {
+interface IBookmarkForm {
   title: string;
   content: string;
   category: string;
 }
-type MemoFormScreenProps = NativeStackScreenProps<ParamListBase, 'MemoForm'>;
-export default function MemoForm({navigation}: MemoFormScreenProps) {
+type BookmarkFormScreenProps = NativeStackScreenProps<
+  ParamListBase,
+  'BookmarkForm'
+>;
+export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
   // 예시 메모 데이터
-  const {control} = useForm<IMemoForm>();
+  const {control} = useForm<IBookmarkForm>();
   const goBack = () => {
     navigation.goBack();
   };
