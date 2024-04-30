@@ -1,9 +1,10 @@
 // import Calendar from '@/screens/Home/components/calendar';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,9 +12,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 interface IBookmarkForm {
-  title: string;
+  name: string;
+  url: string;
   content: string;
   category: string;
 }
@@ -21,23 +24,51 @@ type BookmarkFormScreenProps = NativeStackScreenProps<
   ParamListBase,
   'BookmarkForm'
 >;
+
+const isValidUrl = (url: string) => {
+  const pattern = new RegExp('^(http://|https://)');
+  return pattern.test(url);
+};
+
 export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
   // 예시 메모 데이터
-  const {control} = useForm<IBookmarkForm>();
+  const {control, setValue} = useForm<IBookmarkForm>();
   const goBack = () => {
     navigation.goBack();
   };
-
+  const getClipboardUrl = async () => {
+    const url = await Clipboard.getString();
+    isValidUrl(url) && setValue('url', url);
+  };
+  useEffect(() => {
+    getClipboardUrl();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <SafeAreaView style={styles.safeArea}>
+      <Pressable onPress={getClipboardUrl}>
+        <Text>Copy to Clipboard</Text>
+      </Pressable>
       <View style={styles.container}>
         <View style={styles.formContainer}>
           <Controller
             control={control}
-            name="title"
+            name="name"
             render={({field: {onChange, onBlur, value}}) => (
               <TextInput
-                placeholder="제목"
+                placeholder="이름"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="url"
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                placeholder="URL"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
