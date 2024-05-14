@@ -13,7 +13,11 @@ import {
   View,
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
-const DomParser = require('react-native-html-parser').DOMParser;
+import Icon from 'react-native-vector-icons/Fontisto';
+import SpacerY from '@/components/spacer-y';
+import getDataFromHTML from '@/utils/getDataFromHTML';
+import isValidUrl from '@/utils/isValidUrl';
+import getHTML from '@/utils/getHTML';
 
 interface IBookmarkForm {
   name: string;
@@ -26,59 +30,6 @@ type BookmarkFormScreenProps = NativeStackScreenProps<
   'BookmarkForm'
 >;
 
-const isValidUrl = (url: string) => {
-  const pattern = new RegExp('^(http://|https://)');
-  return pattern.test(url);
-};
-
-const fetchData = async (url: string) => {
-  if (!isValidUrl(url)) return;
-  try {
-    const response = await fetch(url);
-    const html = await response.text();
-    return html;
-  } catch (error) {
-    console.error('Failed to fetch data:', error);
-  }
-};
-
-const getItemsFromMusinsa = (doc: any) => {
-  const scripts = doc.getElementsByTagName('script');
-  let targetScript = null;
-  for (let i = 0; i < scripts.length; i++) {
-    if (scripts[i].textContent.includes("'original_price':")) {
-      targetScript = scripts[i].textContent;
-      break;
-    }
-  }
-  var itemsStringMatch = targetScript.match(
-    /'items': (\[(?:\s*{[\s\S]*?}\s*,?\s*)+\])/,
-  );
-  if (itemsStringMatch && itemsStringMatch[1]) {
-    // 추출된 배열 문자열이 JSON 형식에 맞도록 작은따옴표를 큰따옴표로 변환
-    var itemsArrayString = itemsStringMatch[1].replace(/'/g, '"');
-    try {
-      var items = JSON.parse(itemsArrayString);
-      return {
-        img: items[0].img,
-        name: items[0].name,
-        originalPrice: items[0].original_price,
-        price: items[0].price,
-      };
-    } catch (e) {
-      console.error('JSON parsing error:', e);
-    }
-  }
-};
-
-const getDataFromHTML = (html: string, siteName: string) => {
-  const parser = new DomParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  if (siteName === 'musinsa') {
-    getItemsFromMusinsa(doc);
-  }
-};
-
 export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
   // 예시 메모 데이터
   const {control, setValue, watch} = useForm<IBookmarkForm>();
@@ -90,15 +41,13 @@ export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
   const setClipboardUrl = async () => {
     const copiedUrl = await Clipboard.getString();
     isValidUrl(copiedUrl) && setValue('url', copiedUrl);
+    copiedUrl;
   };
-  useEffect(() => {
-    setClipboardUrl();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   useEffect(() => {
     if (!url) return;
     const siteName = url.includes('musinsa') ? 'musinsa' : '';
-    fetchData(url).then(html => {
+    getHTML(url).then(html => {
       if (html) {
         const data = getDataFromHTML(html, siteName);
         data;
@@ -107,51 +56,42 @@ export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
   }, [url]);
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Pressable onPress={setClipboardUrl}>
-        <Text>Copy to Clipboard</Text>
-      </Pressable>
       <View style={styles.container}>
         <View style={styles.formContainer}>
-          <Controller
-            control={control}
-            name="name"
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                placeholder="이름"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="url"
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                placeholder="URL"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-          <View style={styles.contentContainer}>
+          <View style={styles.urlInput}>
             <Controller
               control={control}
-              name="content"
+              name="url"
               render={({field: {onChange, onBlur, value}}) => (
                 <TextInput
-                  placeholder="내용"
-                  multiline={true}
+                  placeholder="URL"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                 />
               )}
             />
+            <Pressable onPress={setClipboardUrl}>
+              <Icon name="paste" size={16} color="" />
+            </Pressable>
           </View>
+          <SpacerY height={10} />
+          <Controller
+            control={control}
+            name="name"
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                placeholder="제목"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
         </View>
+        <TouchableOpacity onPress={goBack} style={styles.button}>
+          <Text>저장</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={goBack} style={styles.button}>
           <Text>취소</Text>
         </TouchableOpacity>
@@ -171,6 +111,11 @@ const styles = StyleSheet.create({
   formContainer: {
     padding: 10,
     marginTop: 20,
+  },
+  urlInput: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   contentContainer: {
     height: 400,
