@@ -8,3 +8,10 @@ export interface IBookmark {
   created_at: string;
   updated_at?: string;
 }
+
+export interface IBookmarkForm {
+  product_name: string;
+  url: string;
+  shop_name: string;
+  category?: string;
+}

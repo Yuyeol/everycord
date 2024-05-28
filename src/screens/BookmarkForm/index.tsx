@@ -2,13 +2,12 @@
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect} from 'react';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {
   Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -18,13 +17,9 @@ import SpacerY from '@/components/spacer-y';
 import getDataFromHTML from '@/utils/getDataFromHTML';
 import isValidUrl from '@/utils/isValidUrl';
 import getHTML from '@/utils/getHTML';
+import {IBookmarkForm} from '@/type';
+import HookFormInput from '@/components/hook-form-input';
 
-interface IBookmarkForm {
-  name: string;
-  url: string;
-  content: string;
-  category: string;
-}
 type BookmarkFormScreenProps = NativeStackScreenProps<
   ParamListBase,
   'BookmarkForm'
@@ -59,34 +54,22 @@ export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
       <View style={styles.container}>
         <View style={styles.formContainer}>
           <View style={styles.urlInput}>
-            <Controller
-              control={control}
-              name="url"
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextInput
-                  placeholder="URL"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
-            />
+            <HookFormInput control={control} name="url" placeholder="URL" />
             <Pressable onPress={setClipboardUrl}>
               <Icon name="paste" size={16} color="black" />
             </Pressable>
           </View>
           <SpacerY height={10} />
-          <Controller
+          <HookFormInput
             control={control}
-            name="name"
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                placeholder="제목"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
+            name="shop_name"
+            placeholder="쇼핑몰 이름"
+          />
+          <SpacerY height={10} />
+          <HookFormInput
+            control={control}
+            name="product_name"
+            placeholder="제품 이름"
           />
         </View>
         <TouchableOpacity onPress={goBack} style={styles.button}>
