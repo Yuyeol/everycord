@@ -72,7 +72,7 @@ export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
               )}
             />
             <Pressable onPress={setClipboardUrl}>
-              <Icon name="paste" size={16} color="" />
+              <Icon name="paste" size={16} color="black" />
             </Pressable>
           </View>
           <SpacerY height={10} />

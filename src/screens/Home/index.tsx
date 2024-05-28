@@ -1,5 +1,5 @@
 // import Calendar from '@/screens/Home/components/calendar';
-import Memo from '@/screens/Home/components/memo';
+import Bookmark from '@/screens/Home/components/bookmark';
 import Title from '@/screens/Home/components/title';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -12,11 +12,8 @@ export default function Home({navigation}: HomeScreenProps) {
   };
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* <Title title="일정" />
-      <Title title="루틴" /> */}
       <Title title="북마크" goScreen={goBookmarkForm} />
-      <Memo />
-      {/* <Calendar /> */}
+      <Bookmark />
     </SafeAreaView>
   );
 }

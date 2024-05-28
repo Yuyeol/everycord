@@ -1,8 +1,10 @@
-export interface IMemo {
+export interface IBookmark {
   id: string;
-  title: string;
-  content?: string;
+  shop_name: string;
+  product_name: string;
+  category?: string;
+  url: string;
+  image?: string;
   created_at: string;
   updated_at?: string;
-  category?: string;
 }
