@@ -18,8 +18,8 @@ const getItemsFromMusinsa = (doc: any) => {
     try {
       var items = JSON.parse(itemsArrayString);
       return {
-        img: items[0].img,
-        name: items[0].name,
+        img: 'https:' + items[0].img,
+        name: items[0].item_name,
         originalPrice: items[0].original_price,
         price: items[0].price,
       };
@@ -33,7 +33,7 @@ const getDataFromHTML = (html: string, siteName: string) => {
   const parser = new DomParser();
   const doc = parser.parseFromString(html, 'text/html');
   if (siteName === 'musinsa') {
-    getItemsFromMusinsa(doc);
+    return getItemsFromMusinsa(doc);
   }
 };
 

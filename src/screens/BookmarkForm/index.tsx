@@ -1,9 +1,10 @@
 // import Calendar from '@/screens/Home/components/calendar';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {
+  Image,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -17,7 +18,7 @@ import SpacerY from '@/components/spacer-y';
 import getDataFromHTML from '@/utils/getDataFromHTML';
 import isValidUrl from '@/utils/isValidUrl';
 import getHTML from '@/utils/getHTML';
-import {IBookmarkForm} from '@/type';
+import {IBookmarkForm, IProductData} from '@/type';
 import HookFormInput from '@/components/hook-form-input';
 
 type BookmarkFormScreenProps = NativeStackScreenProps<
@@ -26,7 +27,9 @@ type BookmarkFormScreenProps = NativeStackScreenProps<
 >;
 
 export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
-  // 예시 메모 데이터
+  const [productData, setProductData] = useState<IProductData | undefined>();
+  console.log(productData);
+
   const {control, setValue, watch} = useForm<IBookmarkForm>();
   const goBack = () => {
     navigation.goBack();
@@ -45,13 +48,25 @@ export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
     getHTML(url).then(html => {
       if (html) {
         const data = getDataFromHTML(html, siteName);
-        data;
+        setProductData(data);
       }
     });
   }, [url]);
+  useEffect(() => {
+    if (!productData) return;
+    setValue('product_name', productData.name);
+  }, [productData, setValue]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={goBack} style={styles.button}>
+            <Text style={styles.buttonText}>취소</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goBack} style={styles.button}>
+            <Text style={styles.buttonText}>저장</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.formContainer}>
           <View style={styles.urlInput}>
             <HookFormInput control={control} name="url" placeholder="URL" />
@@ -59,25 +74,38 @@ export default function BookmarkForm({navigation}: BookmarkFormScreenProps) {
               <Icon name="paste" size={16} color="black" />
             </Pressable>
           </View>
-          <SpacerY height={10} />
+          <SpacerY height={5} />
+          <View style={styles.urlInput}>
+            <HookFormInput
+              control={control}
+              name="category"
+              placeholder="카테고리"
+            />
+            <Pressable>
+              <Icon name="search" size={16} color="black" />
+            </Pressable>
+          </View>
+          <SpacerY height={5} />
           <HookFormInput
             control={control}
             name="shop_name"
             placeholder="쇼핑몰 이름"
           />
-          <SpacerY height={10} />
+          <SpacerY height={5} />
           <HookFormInput
             control={control}
             name="product_name"
             placeholder="제품 이름"
           />
         </View>
-        <TouchableOpacity onPress={goBack} style={styles.button}>
-          <Text>저장</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={goBack} style={styles.button}>
-          <Text>취소</Text>
-        </TouchableOpacity>
+        <View>
+          {productData && (
+            <Image
+              source={{uri: productData.img}}
+              style={{width: 100, height: 100}}
+            />
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -91,6 +119,18 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    padding: 10,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    fontSize: 14,
+    color: 'gray',
+  },
   formContainer: {
     padding: 10,
     marginTop: 20,
@@ -102,11 +142,5 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     height: 400,
-  },
-  button: {
-    backgroundColor: 'lightgray',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    alignSelf: 'center',
   },
 });

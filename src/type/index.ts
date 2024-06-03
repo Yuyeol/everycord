@@ -15,3 +15,10 @@ export interface IBookmarkForm {
   shop_name: string;
   category?: string;
 }
+
+export interface IProductData {
+  img: string;
+  name: string;
+  originalPrice: string;
+  price: string;
+}
