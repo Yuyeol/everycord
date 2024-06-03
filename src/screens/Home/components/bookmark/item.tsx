@@ -1,19 +1,19 @@
-import {IMemo} from '@/type';
+import {IBookmark} from '@/type';
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 
 interface IProps {
-  item: IMemo;
+  item: IBookmark;
 }
 
 const Item = ({item}: IProps) => (
   <View style={styles.container}>
     <View style={styles.memoContainer}>
       <View style={styles.titleContainer}>
-        <Text>{item.title}</Text>
+        <Text>{item.product_name}</Text>
       </View>
       <View style={styles.contentContainer}>
-        <Text>{item.content}</Text>
+        <Text>{item.url}</Text>
       </View>
     </View>
   </View>

@@ -1,15 +1,15 @@
-import {useGetMemos} from '@/hooks/useGetMemos';
-import Item from '@/screens/Home/components/memo/item';
-import {IMemo} from '@/type';
+import {useGetBookmarks} from '@/hooks/useGetBookmarks';
+import Item from '@/screens/Home/components/bookmark/item';
+import {IBookmark} from '@/type';
 import React from 'react';
 import {FlatList, View, StyleSheet, Text, Pressable} from 'react-native';
 
 interface IRenderItem {
-  item: IMemo;
+  item: IBookmark;
 }
 
-function Memo() {
-  const {data: memos} = useGetMemos();
+function Bookmark() {
+  const {data: memos} = useGetBookmarks();
   const renderItem = ({item}: IRenderItem) => <Item item={item} />;
   return (
     <View style={styles.container}>
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Memo;
+export default Bookmark;
